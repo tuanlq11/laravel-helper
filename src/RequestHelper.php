@@ -121,7 +121,7 @@ class RequestHelper
      * @param int $timeout
      * @return mixed
      */
-    public static function makeGet($url, $param, $user = null, $password = '', $resturnHeader = false, $timeout = 30)
+    public static function makeGet($url, $param, $user = null, $password = '', $resturnHeader = false, $timeout = 30, $contentType = 'application/json')
     {
         $query_string = http_build_query($param);
         $ch = curl_init();
@@ -131,9 +131,9 @@ class RequestHelper
             CURLOPT_TIMEOUT => $timeout,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT => self::$agent,
-            CURLOPT_HTTPHEADER => array_merge(array(
-                'Content-Type: application/json'
-            ), !is_null($user) ? [sprintf('Authorization: Basic %s', base64_encode("{$user}:{$password}"))] : []),
+            CURLOPT_HTTPHEADER => array_merge([
+                !$contentType?'':'Content-Type: application/json'
+            ], !is_null($user) ? [sprintf('Authorization: Basic %s', base64_encode("{$user}:{$password}"))] : []),
             CURLOPT_COOKIE => self::cookie2Text(),
             CURLOPT_HEADER => $resturnHeader
         ];
