@@ -123,7 +123,7 @@ class RequestHelper
      */
     public static function makeGet($url, $param, $user = null, $password = '', $resturnHeader = false, $timeout = 30, $contentType = 'application/json')
     {
-        $query_string = http_build_query($param);
+        $query_string = is_string($param)?$param:http_build_query($param);
         $ch = curl_init();
 
         $options = [
